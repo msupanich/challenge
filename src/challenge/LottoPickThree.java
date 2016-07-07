@@ -28,6 +28,10 @@ public class LottoPickThree extends LottoPicker {
 		return ticket;
 	}
 	
+	public int getRemaining() {
+		return maxThree - threeCount + 1;
+	}
+	
 	public boolean checkRemaining() {
 		return areTicketsRemaining(threeCount, maxThree);
 	}

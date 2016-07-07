@@ -27,4 +27,8 @@ public class LottoPickFive extends LottoPicker {
 		
 		return ticket;
 	}
+	
+	public int getRemaining() {
+		return maxFive - fiveCount + 1;
+	}
 }

@@ -4,27 +4,42 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LottoMachine {
-	private int maxFour = LottoMachineConstants.PICKFOURMAX;
-	private int maxFive = LottoMachineConstants.PICKFIVEMAX;
-	private int fourCount = 0;
-	private int fiveCount = 0;
-	
+
 	public static void Main (String[] args) { 
 		int currentCustId = 0;
 		ArrayList<LottoCustomer> customers = new ArrayList<LottoCustomer>();
 		LottoPickThree pickThree = new LottoPickThree();
 		LottoPickFour pickFour = new LottoPickFour();
 		LottoPickFive pickFive = new LottoPickFive();
-		
+		boolean soldOutAttempt = false;
 		
 		while (true) {
 			String name = args[0];
 			int numPickThree = Integer.parseInt(args[1]);
 			int numPickFour = Integer.parseInt(args[2]);
 			int numPickFive = Integer.parseInt(args[3]);
+			int pickThreeLeft = pickThree.getRemaining();
+			int pickFourLeft = pickFour.getRemaining();
+			int pickFiveLeft = pickFive.getRemaining();
 			
-			validatePurchase(numPickThree, numPickFour, numPickFive);
+			int ticketsToPurchase = numPickThree + numPickFour + numPickFive;
 			
+			while (ticketsToPurchase > 0) {
+				
+				if ((numPickThree - pickThreeLeft) < 0) {
+					ticketsToPurchase -= numPickThree;
+				}
+				if ((numPickFour - pickFourLeft) < 0) {
+					ticketsToPurchase -= numPickFour;
+				}
+				if ((numPickFive - pickFiveLeft) < 0) {
+					ticketsToPurchase -= numPickFive;
+				}
+				
+				
+				
+			}
+
 			LottoCustomer newCustomer = new LottoCustomer(name, currentCustId);
 			
 			for (int i = 0;  i < numPickThree; i++) {
