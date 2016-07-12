@@ -1,7 +1,7 @@
 package challenge;
 
 public class LottoPickThree extends LottoPicker {
-	private int maxThree = LottoMachineConstants.PICKTHREEMAX;
+	private int maxThree = LottoConstants.PICKTHREEMAX;
 	private int threeCount = 1;
 	
 	public LottoPickThree () {
@@ -13,7 +13,7 @@ public class LottoPickThree extends LottoPicker {
 	 * @return
 	 */
 	public LottoPickThreeTicket pickThree () {
-		LottoPickThreeTicket ticket = new LottoPickThreeTicket(threeCount);
+		LottoPickThreeTicket ticket = new LottoPickThreeTicket(threeCount, LottoConstants.PICKTHREE);
 		int newTicketNumber = picker(ticket);
 		
 		//If the number is 0 then return null so no ticket is assigned.

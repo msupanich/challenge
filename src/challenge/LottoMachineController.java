@@ -3,21 +3,66 @@ package challenge;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LottoMachine {
+/**
+ * The main Lottery controller. 
+ * @author supanichm
+ * @since  7/12/2016
+ *
+ */
+public class LottoMachineController {
+	int currentCustId;
+	ArrayList<LottoCustomer> customers;
+	boolean soldOutAttempt;
+	LottoCustomer currentCustomer;
+	
+	public LottoMachineController() {
+		customers = new ArrayList<LottoCustomer>();
+		currentCustId = 1;
+		soldOutAttempt = false;
+	}
+	
+	/**
+	 * Set up a new customer with an ID.
+	 * @param name
+	 */
+	public void newCustomer(String name) {
+		currentCustomer = new LottoCustomer(name, currentCustId);
+		currentCustId++;
+	}
+	
+	/**
+	 * Assign tickets for each type for the given amounts.
+	 * @param numPickThree
+	 * @param numPickFour
+	 * @param numPickFive
+	 */
+	public boolean assignTickets(int numPickThree, int numPickFour, int numPickFive) {
+		
+		return false;
+	}
+	
+	/**
+	 * Check availability of desired tickets. Reassign to
+	 * @param numPickThree
+	 * @param numPickFour
+	 * @param numPickFive
+	 * @return
+	 */
+	public boolean checkTypeAvailability(int numPickThree, int numPickFour, int numPickFive) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public void Main (String[] args) { 
 
-	public static void Main (String[] args) { 
-		int currentCustId = 0;
-		ArrayList<LottoCustomer> customers = new ArrayList<LottoCustomer>();
 		LottoPickThree pickThree = new LottoPickThree();
 		LottoPickFour pickFour = new LottoPickFour();
 		LottoPickFive pickFive = new LottoPickFive();
-		boolean soldOutAttempt = false;
+
 		
 		while (true) {
 			String name = args[0];
-			int numPickThree = Integer.parseInt(args[1]);
-			int numPickFour = Integer.parseInt(args[2]);
-			int numPickFive = Integer.parseInt(args[3]);
+
 			int pickThreeLeft = pickThree.getRemaining();
 			int pickFourLeft = pickFour.getRemaining();
 			int pickFiveLeft = pickFive.getRemaining();
@@ -44,7 +89,7 @@ public class LottoMachine {
 			
 			for (int i = 0;  i < numPickThree; i++) {
 				if (!pickThree.checkRemaining()) {
-					int newTicketType = ThreadLocalRandom.current().nextInt(0, LottoMachineConstants.NUMTICKETTYPES);
+					int newTicketType = ThreadLocalRandom.current().nextInt(0, LottoConstants.NUMTICKETTYPES);
 					int pickThreeRemaining = numPickThree - i;
 					
 					switch (newTicketType) {
@@ -78,4 +123,12 @@ public class LottoMachine {
 			customers.add(newCustomer);
 		}
 	}
+
+
+	public boolean ticketsRemaining() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 }

@@ -3,9 +3,11 @@ package challenge;
 public abstract class LottoTicket {
 	private static int ticketNumber;
 	private static int ticketId;
+	private static String ticketType;
 	
-	public LottoTicket (int ticketId) {
+	public LottoTicket (int ticketId, String ticketType) {
 		LottoTicket.ticketId = ticketId;
+		LottoTicket.ticketType = ticketType;
 	}
 
 	/**

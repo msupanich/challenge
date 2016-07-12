@@ -1,7 +1,7 @@
 package challenge;
 
 public class LottoPickFour extends LottoPicker {
-	private int maxFour = LottoMachineConstants.PICKFOURMAX;
+	private int maxFour = LottoConstants.PICKFOURMAX;
 	private int fourCount = 1;
 	
 	public LottoPickFour() {
@@ -13,7 +13,7 @@ public class LottoPickFour extends LottoPicker {
 	 * @return
 	 */
 	public LottoPickFourTicket pickFour () {
-		LottoPickFourTicket ticket = new LottoPickFourTicket(fourCount);
+		LottoPickFourTicket ticket = new LottoPickFourTicket(fourCount, LottoConstants.PICKFOUR);
 		int newTicketNumber = picker(ticket);
 		
 		//If the number is 0 then return null so no ticket is assigned.
