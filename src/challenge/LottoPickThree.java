@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class LottoPickThree extends LottoPicker {
 	private int maxThree = LottoConstants.PICKTHREEMAX;
 	private int threeCount;
-	private ArrayList<LottoTicket> allPickThreeTickets;
+	private ArrayList<Integer> allPickThreeTickets;
 	
 	public LottoPickThree () {
 		super();
 		threeCount = 1;
-		allPickThreeTickets = new ArrayList<LottoTicket>();
+		allPickThreeTickets = new ArrayList<>();
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class LottoPickThree extends LottoPicker {
 		}
 		
 		ticket.setTicketNumber(newTicketNumber);
-		allPickThreeTickets.add(ticket);
+		allPickThreeTickets.add(newTicketNumber);
 		
 		threeCount++;
 		
@@ -40,5 +40,9 @@ public class LottoPickThree extends LottoPicker {
 	
 	public boolean hasRemaining() {
 		return areTicketsRemaining(threeCount, maxThree);
+	}
+	
+	public ArrayList<Integer> getAllPickThreeTickets() {
+		return allPickThreeTickets;
 	}
 }

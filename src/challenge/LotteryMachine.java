@@ -4,7 +4,7 @@ package challenge;
 
 public class LotteryMachine {
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws InterruptedException {
 		LottoMachineController lottoController = new LottoMachineController();
 		
 
@@ -24,7 +24,6 @@ public class LotteryMachine {
 		
 		lottoController.draw();
 		lottoController.report();
-		
 		lottoController.goodBye();
 	}
 	

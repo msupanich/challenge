@@ -11,20 +11,36 @@ public abstract class LottoPicker {
 	
 	/**
 	 * Pick a lottery ticket for the specified type.
+	 * Ticket number cannot be duplicated.
 	 * @return
 	 */
-	public int picker(LottoTicket ticket, ArrayList<LottoTicket> allTickets) {
+	public int picker(LottoTicket ticket, ArrayList<Integer> allTickets) {
 		if (ticket instanceof LottoPickThreeTicket) {
 			int number = randNum.pickThree();
-
+			if (allTickets.contains(number)) {
+				picker(ticket, allTickets);
+			}
+			
+			return number;
+			
 		}
 		
 		if (ticket instanceof LottoPickFourTicket) {
-			return randNum.pickFour();
+			int number = randNum.pickFour();
+			if (allTickets.contains(number)) {
+				picker(ticket, allTickets);
+			}
+			
+			return number;
 		}
 		
 		if (ticket instanceof LottoPickFiveTicket) {
-			return randNum.pickFive();
+			int number = randNum.pickFive();
+			if (allTickets.contains(number)) {
+				picker(ticket, allTickets);
+			}
+			
+			return number;
 		}
 		
 		return 0;

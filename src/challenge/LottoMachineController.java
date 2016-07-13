@@ -1,6 +1,7 @@
 package challenge;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +26,8 @@ public class LottoMachineController {
 	boolean pickFourSoldOut;
 	boolean pickFiveSoldOut;
 	
+	HashMap<Integer, LottoCustomer> allCustomerTickets;
+	
 	public LottoMachineController() {
 		customers = new ArrayList<LottoCustomer>();
 		currentCustId = 1;
@@ -35,6 +38,7 @@ public class LottoMachineController {
 		pickThreeSoldOut = false;
 		pickFourSoldOut = false;
 		pickFiveSoldOut = false;
+		allCustomerTickets = new HashMap<Integer, LottoCustomer>();
 	}
 	
 	/**
@@ -63,18 +67,43 @@ public class LottoMachineController {
 		}
 		
 		checkSoldOut();
+		int leftOverTickets = 0;
 		while (totalTickets > 0) {
-			if (numPickThree > 0 && !pickThreeSoldOut) {
-				validatePickThree(numPickThree);
+			int threeRemaining = pickThree.getRemaining();
+			if (!pickThreeSoldOut && numPickThree > 0 && numPickThree > threeRemaining) {
+				leftOverTickets =+ numPickThree - threeRemaining;
+				totalTickets =- threeRemaining;
+				pickThreeSoldOut = true;
 			}
-			if (numPickFour > 0 && !pickFourSoldOut) {
-				validatePickFour(numPickFour);
+			
+			int fourRemaining = pickFour.getRemaining();
+			if (!pickFourSoldOut && numPickFour > 0 && numPickFour > fourRemaining) {
+				leftOverTickets =+ numPickFour - fourRemaining;
+				totalTickets =- fourRemaining;
+				pickFourSoldOut = true;
 			}
-			if (numPickFive > 0 && !pickFiveSoldOut) {
-				validatePickFive(numPickFive);
+			
+			int fiveRemaining = pickFive.getRemaining();
+			if (!pickFiveSoldOut && numPickFive > 0 && numPickFive > fiveRemaining) {
+				leftOverTickets =+ numPickFive - fiveRemaining;
+				totalTickets =- fiveRemaining;
+				pickFiveSoldOut = true;
+			}
+			//TODO Need to handle what happens if follow checks put it over the max.
+			//nextInt() is exclusive on max.
+			int newTicketType = ThreadLocalRandom.current().nextInt(1, LottoConstants.NUMTICKETTYPES + 1);
+			switch (newTicketType) {
+				case 1: if (!pickThreeSoldOut) {
+							numPickThree =+ leftOverTickets;
+						}
+				case 2: if (!pickFourSoldOut) {
+							numPickFour =+ leftOverTickets;
+						}
+				case 3: if (!pickFiveSoldOut) {
+							numPickFive =+ leftOverTickets;
+						}
 			}
 		}
-		
 		
 		
 		if (numPickThree > 0) {
@@ -111,7 +140,7 @@ public class LottoMachineController {
 			
 			for (int i = 0;  i < numPickThree; i++) {
 				if (!pickThree.checkRemaining()) {
-					int newTicketType = ThreadLocalRandom.current().nextInt(0, LottoConstants.NUMTICKETTYPES);
+					int newTicketType = ThreadLocalRandom.current().nextInt(1, LottoConstants.NUMTICKETTYPES + 1);
 					int pickThreeRemaining = numPickThree - i;
 					
 					switch (newTicketType) {
@@ -156,6 +185,7 @@ public class LottoMachineController {
 			
 			if (threeTicket != null) {
 				currentCustomer.addPickThreeTicket(threeTicket);
+				allCustomerTickets.put(threeTicket.getTicketNumber(), currentCustomer);
 			}
 		}
 		
@@ -171,6 +201,7 @@ public class LottoMachineController {
 			
 			if (fourTicket != null) {
 				currentCustomer.addPickFourTicket(fourTicket);
+				allCustomerTickets.put(fourTicket.getTicketNumber(), currentCustomer);
 			}
 		}
 	}
@@ -185,6 +216,7 @@ public class LottoMachineController {
 			
 			if (fiveTicket != null) {
 				currentCustomer.addPickFiveTicket(fiveTicket);
+				allCustomerTickets.put(fiveTicket.getTicketNumber(), currentCustomer);
 			}
 		}
 	}
@@ -211,6 +243,67 @@ public class LottoMachineController {
 	public String pickFiveRemaining() {
 		return Integer.toString(pickFive.getRemaining());
 	}
+	
+
+	/**
+	 * Complete the drawing for the lottery.
+	 * Print the winner's name and ticket number.
+	 */
+	public void draw() {
+		int pickThreeWinningNumber = pickThreeWinningNumber();
+		LottoCustomer pickThreeWinner = allCustomerTickets.get(pickThreeWinningNumber);
+		System.out.println("The Pick 3 winner is " + pickThreeWinner.getCustName() + " with ticket number " + pickThreeWinningNumber);
+		
+		int pickFourWinningNumber = pickFourWinningNumber();
+		LottoCustomer pickFourWinner = allCustomerTickets.get(pickFourWinningNumber);
+		System.out.println("The Pick 4 winner is " + pickFourWinner.getCustName() + " with ticket number " + pickFourWinningNumber);
+		
+		int pickFiveWinningNumber = pickFiveWinningNumber();
+		LottoCustomer pickFiveWinner = allCustomerTickets.get(pickFiveWinningNumber);
+		System.out.println("The Pick 5 winner is " + pickFiveWinner.getCustName() + " with ticket number " + pickFiveWinningNumber);
+	}
+	
+	/**
+	 * Pick the winning Pick 3 ticket number from the map of tickets.
+	 * @return
+	 */
+	private int pickThreeWinningNumber() {
+		int ticketPoolSize = pickThree.getAllPickThreeTickets().size();
+		int pickRandom = ThreadLocalRandom.current().nextInt(0, ticketPoolSize);
+		return pickThree.getAllPickThreeTickets().get(pickRandom);
+	}
+	
+	/**
+	 * Pick the winning Pick 4 ticket number from the map of all tickets.
+	 * @return
+	 */
+	private int pickFourWinningNumber() {
+		int ticketPoolSize = pickFour.getAllPickFourTickets().size();
+		int pickRandom = ThreadLocalRandom.current().nextInt(0, ticketPoolSize);
+		return pickFour.getAllPickFourTickets().get(pickRandom);
+	}
+	
+	/**
+	 * Pick the winning Pick 5 ticket number from the map of all tickets.
+	 * @return
+	 */
+	private int pickFiveWinningNumber() {
+		int ticketPoolSize = pickFive.getAllPickFiveTickets().size();
+		int pickRandom = ThreadLocalRandom.current().nextInt(0, ticketPoolSize);
+		return pickFive.getAllPickFiveTickets().get(pickRandom);
+	}
+	
+	/**
+	 * Print the report and statistics for the lottery drawing.
+	 * - How many customers purchased tickets?
+	 * - What type of tickets did each customer purchase?
+	 * - Did customers attempt to purchase sold out ticket types?
+	 */
+	public void report() {
+		System.out.println("Tickets were purchased by " + allCustomerTickets.size() + " customers.");
+		System.out.println();
+	}
+
 
 	/**
 	 * Print goodbye message.
@@ -232,13 +325,5 @@ public class LottoMachineController {
 		System.out.println("BOOOM!!");
 		System.out.println("Just kidding :) Have a nice day!");
 	}
-
-	/**
-	 * Complete the drawing for the lottery.
-	 */
-	public void draw() {
-		
-	}
-
 
 }
