@@ -21,7 +21,7 @@ public class LottoPickFour extends LottoPicker {
 			return null;
 		}
 		
-		LottoTicket.setTicketNumber(picker(ticket));
+		ticket.setTicketNumber(newTicketNumber);
 		
 		fourCount++;
 		
@@ -30,5 +30,9 @@ public class LottoPickFour extends LottoPicker {
 	
 	public int getRemaining() {
 		return maxFour - fourCount + 1;
+	}
+	
+	public boolean hasRemaining() {
+		return areTicketsRemaining(fourCount, maxFour);
 	}
 }

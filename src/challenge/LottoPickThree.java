@@ -1,11 +1,16 @@
 package challenge;
 
+import java.util.ArrayList;
+
 public class LottoPickThree extends LottoPicker {
 	private int maxThree = LottoConstants.PICKTHREEMAX;
-	private int threeCount = 1;
+	private int threeCount;
+	private ArrayList<LottoTicket> allPickThreeTickets;
 	
 	public LottoPickThree () {
 		super();
+		threeCount = 1;
+		allPickThreeTickets = new ArrayList<LottoTicket>();
 	}
 	
 	/**
@@ -14,14 +19,15 @@ public class LottoPickThree extends LottoPicker {
 	 */
 	public LottoPickThreeTicket pickThree () {
 		LottoPickThreeTicket ticket = new LottoPickThreeTicket(threeCount, LottoConstants.PICKTHREE);
-		int newTicketNumber = picker(ticket);
+		int newTicketNumber = picker(ticket, allPickThreeTickets);
 		
 		//If the number is 0 then return null so no ticket is assigned.
 		if (newTicketNumber == 0) {
 			return null;
 		}
 		
-		LottoTicket.setTicketNumber(picker(ticket));
+		ticket.setTicketNumber(newTicketNumber);
+		allPickThreeTickets.add(ticket);
 		
 		threeCount++;
 		
@@ -32,7 +38,7 @@ public class LottoPickThree extends LottoPicker {
 		return maxThree - threeCount + 1;
 	}
 	
-	public boolean checkRemaining() {
+	public boolean hasRemaining() {
 		return areTicketsRemaining(threeCount, maxThree);
 	}
 }

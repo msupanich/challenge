@@ -21,7 +21,7 @@ public class LottoPickFive extends LottoPicker {
 			return null;
 		}
 		
-		LottoTicket.setTicketNumber(picker(ticket));
+		ticket.setTicketNumber(newTicketNumber);
 		
 		fiveCount++;
 		
@@ -30,5 +30,9 @@ public class LottoPickFive extends LottoPicker {
 	
 	public int getRemaining() {
 		return maxFive - fiveCount + 1;
+	}
+	
+	public boolean hasRemaining() {
+		return areTicketsRemaining(fiveCount, maxFive);
 	}
 }

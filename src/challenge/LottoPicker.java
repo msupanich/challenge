@@ -1,5 +1,7 @@
 package challenge;
 
+import java.util.ArrayList;
+
 public abstract class LottoPicker {
 	RandomNumbers randNum;
 	
@@ -11,9 +13,10 @@ public abstract class LottoPicker {
 	 * Pick a lottery ticket for the specified type.
 	 * @return
 	 */
-	public int picker(LottoTicket ticket) {
+	public int picker(LottoTicket ticket, ArrayList<LottoTicket> allTickets) {
 		if (ticket instanceof LottoPickThreeTicket) {
-			return randNum.pickThree();
+			int number = randNum.pickThree();
+
 		}
 		
 		if (ticket instanceof LottoPickFourTicket) {
